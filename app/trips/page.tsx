@@ -1,12 +1,11 @@
-"use client";
-
 import { auth } from "@/auth"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 
 export default async function TripsPage(){
 
-    const session = await auth()
+    const session = await auth();
+    
     if(!session){
         return(
             <div className="flex justify-center items-center h-screen text-gray-700 text-xl">

@@ -1,30 +1,81 @@
 "use client";
 
-import { Card,CardHeader, CardTitle, CardDescription, CardContent, CardFooter, CardAction,  } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { createTrip } from "@/lib/actions/create-trip";
+import { useTransition } from "react";
 
 export default function NewTripPage() {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Card>
-          <CardHeader>
-            <CardTitle>New Trip</CardTitle>
-            <CardDescription>Make a new trip</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form className="space-y-6">
+  const [isPending, startTransition] = useTransition();
+
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      <Card>
+        <CardHeader>
+          <CardTitle>New Trip</CardTitle>
+          <CardDescription>Make a new trip</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form
+            className="space-y-6"
+            action={(formData: FormData) => {
+              startTransition(() => {
+                createTrip(formData);
+              });
+            }}
+          >
+            <div>
+              <label
+                className="block text-sm font-medium text-gray-700"
+                htmlFor="title"
+              >
+                Title
+              </label>
+              <input
+                type="text"
+                name="title" // Correct name attribute
+                placeholder="Trip Title"
+                className={cn(
+                  "w-full border border-gray-300 px-3 py-2",
+                  "rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                )}
+              />
+            </div>
+            <div>
+              <label
+                className="block text-sm font-medium text-gray-700"
+                htmlFor="description"
+              >
+                Description
+              </label>
+              <textarea
+                name="description" // Correct name attribute
+                placeholder="Trip Description"
+                className={cn(
+                  "w-full border border-gray-300 px-3 py-2",
+                  "rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                )}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
               <div>
                 <label
                   className="block text-sm font-medium text-gray-700"
-                  htmlFor="title"
+                  htmlFor="startDate"
                 >
-                  Title
+                  Start Date
                 </label>
                 <input
-                  type="text"
-                  name="title"
-                  placeholder="Trip Title"
+                  type="date"
+                  name="startDate" // Correct name attribute
                   className={cn(
                     "w-full border border-gray-300 px-3 py-2",
                     "rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -34,61 +85,27 @@ export default function NewTripPage() {
               <div>
                 <label
                   className="block text-sm font-medium text-gray-700"
-                  htmlFor="title"
+                  htmlFor="endDate"
                 >
-                  Description
+                  End Date
                 </label>
-                <textarea
-                  name="title"
-                  placeholder="Trip Description"
+                <input
+                  type="date"
+                  name="endDate" // Correct name attribute
                   className={cn(
                     "w-full border border-gray-300 px-3 py-2",
                     "rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   )}
                 />
               </div>
+            </div>
 
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label
-                    className="block text-sm font-medium text-gray-700"
-                    htmlFor="title"
-                  >
-                    Start Date
-                  </label>
-                  <input
-                    type="date"
-                    name="title"
-                    placeholder="Trip Title"
-                    className={cn(
-                      "w-full border border-gray-300 px-3 py-2",
-                      "rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    )}
-                  />
-                </div>
-                <div>
-                  <label
-                    className="block text-sm font-medium text-gray-700"
-                    htmlFor="title"
-                  >
-                    End Date
-                  </label>
-                  <input
-                    type="date"
-                    name="title"
-                    placeholder="Trip Title"
-                    className={cn(
-                      "w-full border border-gray-300 px-3 py-2",
-                      "rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    )}
-                  />
-                </div>
-              </div>
-
-              <Button type="submit" className="w-full">Create Trip</Button>
-            </form>
-          </CardContent>
-        </Card>
-      </div>
-    );
+            <Button type="submit" disabled={isPending} className="w-full">
+              {isPending ? "Creating....Create Trip" : "Create Trip"}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
+  );
 }
