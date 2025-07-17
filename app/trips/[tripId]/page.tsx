@@ -1,30 +1,30 @@
-import { auth } from "@/auth"
-import { prisma } from "@/lib/prisma"
-import TripDetailClient from "@/components/trip-detail"
+import { auth } from "@/auth";
+import TripDetailClient from "@/components/trip-detail";
+import { prisma } from "@/lib/prisma";
 
 export default async function TripDetail({
-    params
+  params,
 }: {
-    params: Promise<tripId :string>
-}){
+  params: Promise<{ tripId: string }>;
+}) {
+  const { tripId } = await params;
 
-    const tripId = await params
+  const session = await auth();
 
-    const session = await auth()
+  if (!session) {
+    return <div> Please sign in.</div>;
+  }
 
+  const trip = await prisma.trip.findFirst({
+    where: { id: tripId, userId: session.user?.id },
+    include: { locations: true },
+  });
 
-    if(!session){
-        return <div>Please Sign in.</div>
-    }
+  console.log(trip);
 
+  if (!trip) {
+    return <div> Trip not found.</div>;
+  }
 
-    const trip = await prisma.trip.findFirst({
-        where: {id: tripId, userId: session.user?.id}
-    });
-
-    if(!trip){
-        return <div> Trip Not Found</div>;
-    }
-    
-    return <TripDetailClient trip={trip}/>
+  return <TripDetailClient trip={trip} />;
 }
