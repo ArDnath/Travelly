@@ -1,5 +1,4 @@
 "use client";
-
 import {
   Card,
   CardHeader,
@@ -10,10 +9,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { createTrip } from "@/lib/actions/create-trip";
-import { useTransition } from "react";
+import { useTransition, useState } from "react";
+import { UploadButton } from "@/lib/upload-thing";
 
 export default function NewTripPage() {
   const [isPending, startTransition] = useTransition();
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   return (
     <div className="flex items-center justify-center min-h-screen">
@@ -26,6 +27,9 @@ export default function NewTripPage() {
           <form
             className="space-y-6"
             action={(formData: FormData) => {
+              if(imageUrl){
+                formData.append("imageUrl", imageUrl);
+              }
               startTransition(() => {
                 createTrip(formData);
               });
@@ -98,6 +102,28 @@ export default function NewTripPage() {
                   )}
                 />
               </div>
+            </div>
+
+            <div>
+              <label> Trip Image </label>
+              {imageUrl && (
+                <img
+                  src={imageUrl}
+                  alt="Trip"
+                  className="w-full mb-4 rounded-md max-h-48 object-cover"
+                  />
+              )}
+              <UploadButton
+                endpoint="imageUploader"
+                onClientUploadComplete={(res) => {
+                  if (res && res[0].ufsUrl) {
+                    setImageUrl(res[0].ufsUrl);
+                  }
+                }}
+                onUploadError={(error: Error) => {
+                  console.error("Upload failed:", error);
+                }}
+              />
             </div>
 
             <Button type="submit" disabled={isPending} className="w-full">
