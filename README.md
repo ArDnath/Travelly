@@ -2,7 +2,7 @@
 
 Travel Planner is a web application built with [Next.js](https://nextjs.org) that allows users to plan their trips, create itineraries, organize destinations, and share travel plans. It includes features like interactive maps, drag-and-drop itinerary management, and integration with third-party services for file uploads and geocoding.
 
-### Live Demo - (https://travelly.aryamn.space/)
+### Live Demo - https://travelly.aryamn.space/
 ## Features
 
 - **User Authentication**: Secure login and logout using GitHub OAuth.
