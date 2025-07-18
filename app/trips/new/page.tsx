@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { createTrip } from "@/lib/actions/create-trip";
 import { useTransition, useState } from "react";
+import Image from "next/image";
 import { UploadButton } from "@/lib/upload-thing";
 
 export default function NewTripPage() {
@@ -107,7 +108,7 @@ export default function NewTripPage() {
             <div>
               <label> Trip Image </label>
               {imageUrl && (
-                <img
+                <Image
                   src={imageUrl}
                   alt="Trip"
                   className="w-full mb-4 rounded-md max-h-48 object-cover"

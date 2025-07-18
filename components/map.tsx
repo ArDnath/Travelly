@@ -1,7 +1,7 @@
 "use client";
 
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import { LatLngExpression, Icon } from "leaflet";
+import { LatLngExpression } from "leaflet";
 import { Location } from "@/app/generated/prisma";
 
 // Optional: Fix default marker icon issue in Leaflet
